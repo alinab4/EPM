@@ -1,0 +1,473 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Dashboard - EPM</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #f8fafc;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-bottom: 3px solid #dc2626;
+        }
+
+        .navbar a {
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar button {
+            background: #dc2626;
+        }
+
+        .navbar button:hover {
+            background: #b91c1c;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            border-bottom: 3px solid #dc2626;
+            padding-bottom: 20px;
+        }
+
+        .page-header h2 {
+            color: #1a1a1a;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #dc2626;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .summary-card h4 {
+            color: #64748b;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .summary-card p {
+            font-size: 36px;
+            font-weight: 800;
+            color: #dc2626;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .table-container h3 {
+            padding: 25px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 3px solid #dc2626;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f1f5f9;
+        }
+
+        th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 700;
+            color: #1a1a1a;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rating-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .rating-high {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .rating-medium {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .rating-low {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .form-section {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-section h3 {
+            color: #1a1a1a;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-group select {
+            appearance: none;
+            padding-right: 35px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23dc2626' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: #dc2626;
+        }
+
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .page-header h2 {
+                font-size: 24px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px 10px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h2 {
+                font-size: 20px;
+            }
+
+            .summary-card p {
+                font-size: 28px;
+            }
+
+            .btn-submit {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/index.html">📊 EPM Dashboard</a>
+        <button id="logout-btn">Logout</button>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>My Performance Dashboard</h2>
+            <p>Track your performance metrics, reviews, and feedback</p>
+        </div>
+
+        <div id="summary" class="summary-grid"></div>
+
+        <div class="table-container">
+            <h3>📋 My Performance Reviews</h3>
+            <table id="reviews-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Rating</th>
+                        <th>Comments</th>
+                        <th>Manager</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" class="empty-state"><p>Loading your performance reviews...</p></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-section">
+            <h3>💬 Submit Feedback to Colleagues</h3>
+            <form id="feedback-form">
+                <div class="form-group">
+                    <label for="user-select">Select Colleague</label>
+                    <select id="user-select" required>
+                        <option value="">👤 Choose a colleague to give feedback...</option>
+                        <option value="1">Sarah Johnson (Manager)</option>
+                        <option value="2">Michael Chen (Employee)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Feedback Message</label>
+                    <textarea id="message" placeholder="Share constructive feedback to help your colleague grow..." required></textarea>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="anonymous-check">
+                    <label for="anonymous-check">Submit Anonymously</label>
+                </div>
+
+                <button type="submit" class="btn-submit">Submit Feedback</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        protectPage();
+
+        async function loadEmployeeData() {
+            try {
+                const [dashboard, reviews, users] = await Promise.all([
+                    apiRequest('/users/dashboard/employee'),
+                    apiRequest('/performance/me'),
+                    apiRequest('/users')
+                ]);
+
+                // Populate summary
+                const summaryContainer = document.getElementById('summary');
+                const avgScore = dashboard.average_performance.toFixed(2);
+                const ratingColor = avgScore >= 4 ? 'high' : avgScore >= 3 ? 'medium' : 'low';
+                
+                summaryContainer.innerHTML = `
+                    <div class="summary-card">
+                        <h4>My Average Score</h4>
+                        <p>${avgScore}</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Feedback Received</h4>
+                        <p>${dashboard.feedback_count}</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Total Reviews</h4>
+                        <p>${reviews.length}</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Latest Rating</h4>
+                        <p>${dashboard.latest_rating ? dashboard.latest_rating.toFixed(2) : 'N/A'}</p>
+                    </div>
+                `;
+
+                // Populate reviews table
+                const reviewsTableBody = document.querySelector("#reviews-table tbody");
+                if (reviews.length === 0) {
+                    reviewsTableBody.innerHTML = '<tr><td colspan="4" class="empty-state"><p>No performance reviews yet. Check back later!</p></td></tr>';
+                } else {
+                    reviewsTableBody.innerHTML = reviews.map(review => {
+                        const rating = review.rating.toFixed(1);
+                        const ratingClass = rating >= 4 ? 'high' : rating >= 3 ? 'medium' : 'low';
+                        return `
+                            <tr>
+                                <td><strong>${new Date(review.created_at).toLocaleDateString()}</strong></td>
+                                <td><span class="rating-badge rating-${ratingClass}">${rating}/5</span></td>
+                                <td>${review.comments || '—'}</td>
+                                <td>${review.manager_id || '—'}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+                
+                // Populate user select for feedback
+                const userSelect = document.getElementById('user-select');
+                users.forEach(user => {
+                    if (user.id !== getCurrentUser().id) {
+                        const option = document.createElement('option');
+                        option.value = user.id;
+                        option.textContent = `${user.name} (${user.role})`;
+                        userSelect.appendChild(option);
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error loading dashboard data: ' + error.message, 'danger');
+            }
+        }
+
+        document.getElementById('feedback-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const feedbackData = {
+                to_user_id: parseInt(document.getElementById('user-select').value),
+                message: document.getElementById('message').value,
+                is_anonymous: document.getElementById('anonymous-check').checked
+            };
+            try {
+                await apiRequest('/feedback', 'POST', feedbackData);
+                showAlert('Feedback submitted successfully!', 'success');
+                e.target.reset();
+            } catch (error) {
+                showAlert('Error submitting feedback: ' + error.message, 'danger');
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', logout);
+
+        loadEmployeeData();
+    </script>
+</body>
+</html>

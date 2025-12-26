@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - EPM Performance Management</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #dc2626 100%);
+        }
+        
+        .auth-form h2 {
+            color: #dc2626;
+        }
+        
+        .auth-form {
+            background: white;
+            border-top: 4px solid #dc2626;
+        }
+
+        .form-group label {
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .form-group input {
+            border: 2px solid #e5e7eb;
+        }
+
+        .form-group input:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            font-weight: 700;
+        }
+
+        button[type="submit"]:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .link a {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .link a:hover {
+            color: #b91c1c;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form">
+            <h2>EPM</h2>
+            <p style="text-align: center; color: #dc2626; margin-bottom: 30px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Welcome Back - Sign In</p>
+            
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input id="email" type="email" placeholder="Enter your email" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" placeholder="Enter your password" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Login as</label>
+                    <select id="role" required>
+                        <option value="Employee">Employee</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px;">Sign In</button>
+            </form>
+            
+            <div class="link">
+                <p style="margin-top: 20px; color: #64748b;">Don't have an account? <a href="/signup.html">Sign Up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const role = urlParams.get('role');
+            if (role) {
+                document.getElementById('role').value = role;
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const body = new URLSearchParams();
+            body.append('username', email);
+            body.append('password', password);
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    body,
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    showAlert('Login failed: ' + (error.detail || 'Invalid credentials'), 'danger');
+                    return;
+                }
+
+                const data = await response.json();
+                localStorage.setItem('token', data.access_token);
+                showAlert('Login successful!', 'success');
+                
+                setTimeout(() => {
+                    redirectToDashboard();
+                }, 500);
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('An error occurred: ' + error.message, 'danger');
+            }
+        });
+    </script>
+</body>
+</html>

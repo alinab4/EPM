@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - EPM Performance Management</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #dc2626 100%);
+        }
+        
+        .auth-form h2 {
+            color: #dc2626;
+        }
+        
+        .auth-form {
+            background: white;
+            border-top: 4px solid #dc2626;
+        }
+
+        .form-group label {
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .form-group input,
+        .form-group select {
+            border: 2px solid #e5e7eb;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-group select {
+            appearance: none;
+            padding-right: 35px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23dc2626' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            font-weight: 700;
+        }
+
+        button[type="submit"]:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .link a {
+            color: #dc2626;
+            font-weight: 700;
+        }
+
+        .link a:hover {
+            color: #b91c1c;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form">
+            <h2>EPM</h2>
+            <p style="text-align: center; color: #dc2626; margin-bottom: 30px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Create Your Account</p>
+            
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input id="name" type="text" placeholder="Enter your full name" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input id="email" type="email" placeholder="Enter your email" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input id="password" type="password" placeholder="Create a password" required />
+                </div>
+                
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <input id="department" type="text" placeholder="Enter your department" />
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" required>
+                        <option value="">Select a role</option>
+                        <option value="Employee">Employee</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px;">Create Account</button>
+            </form>
+            
+            <div class="link">
+                <p style="margin-top: 20px; color: #64748b;">Already have an account? <a href="/login.html">Log In</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const userData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value,
+                department: document.getElementById('department').value
+            };
+
+            try {
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(userData)
+                });
+                
+                if (!response.ok) {
+                    const error = await response.json();
+                    showAlert('Registration failed: ' + (error.detail || 'An error occurred'), 'danger');
+                    return;
+                }
+                
+                showAlert('Account created successfully! Please log in.', 'success');
+                setTimeout(() => {
+                    window.location.href = '/login.html';
+                }, 2000);
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Registration failed: ' + error.message, 'danger');
+            }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('token')) {
+                redirectToDashboard();
+            }
+        });
+    </script>
+</body>
+</html>

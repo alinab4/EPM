@@ -1,0 +1,14 @@
+# Python dependencies for the EPM Employee Performance Management System
+# Use 'pip install -r requirements.txt' to install all required packages.
+
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+SQLAlchemy==2.0.23
+psycopg2-binary==2.9.9
+passlib[bcrypt]==1.7.4
+argon2-cffi==23.1.0
+python-jose[cryptography]==3.3.0
+pydantic==2.5.3
+pydantic-settings==2.1.0
+email-validator==2.1.0
+pyngrok==7.0.4

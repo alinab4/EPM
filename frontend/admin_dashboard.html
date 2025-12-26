@@ -1,0 +1,495 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - EPM</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #f8fafc;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-bottom: 3px solid #dc2626;
+        }
+
+        .navbar a {
+            color: white;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar button {
+            background: #dc2626;
+        }
+
+        .navbar button:hover {
+            background: #b91c1c;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+            border-bottom: 3px solid #dc2626;
+            padding-bottom: 20px;
+        }
+
+        .page-header h2 {
+            color: #1a1a1a;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 5px solid #dc2626;
+            transition: all 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .summary-card h4 {
+            color: #64748b;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .summary-card p {
+            font-size: 36px;
+            font-weight: 800;
+            color: #dc2626;
+        }
+
+        .dashboard-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .table-container h3 {
+            padding: 25px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 3px solid #dc2626;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f1f5f9;
+        }
+
+        th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 700;
+            color: #1a1a1a;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .role-admin {
+            background: rgba(220, 38, 38, 0.15);
+            color: #dc2626;
+        }
+
+        .role-manager {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+        }
+
+        .role-employee {
+            background: rgba(14, 165, 233, 0.15);
+            color: #0ea5e9;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+        }
+
+        .form-section {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-section h3 {
+            color: #1a1a1a;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #dc2626;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+        }
+
+        .form-group select {
+            appearance: none;
+            padding-right: 35px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23dc2626' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            grid-column: 1 / -1;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            .page-header h2 {
+                font-size: 24px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px 10px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h2 {
+                font-size: 20px;
+            }
+
+            .summary-card p {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/index.html">📊 EPM Dashboard</a>
+        <button id="logout-btn">Logout</button>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>System Administration Panel</h2>
+            <p>Manage all users, monitor system performance, and maintain organizational data</p>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <a href="employee_dashboard.html" class="dashboard-link">
+                    <h4>Employee Dashboard</h4>
+                    <p>View Employee Panel</p>
+                </a>
+            </div>
+            <div class="summary-card">
+                <a href="manager_dashboard.html" class="dashboard-link">
+                    <h4>Manager Dashboard</h4>
+                    <p>View Manager Panel</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h3>👥 All System Users</h3>
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="empty-state"><p>Loading user data...</p></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-section">
+            <h3>➕ Add New User</h3>
+            <form id="add-user-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input id="name" type="text" placeholder="Enter full name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input id="email" type="email" placeholder="Enter email address" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" placeholder="Enter password" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="department">Department</label>
+                        <input id="department" type="text" placeholder="Enter department" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role">User Role</label>
+                        <select id="role" required>
+                            <option value="">Select a role...</option>
+                            <option value="Employee">Employee</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        protectPage();
+
+        async function loadAdminData() {
+            try {
+                const [dashboard, users] = await Promise.all([
+                    apiRequest('/users/dashboard/admin'),
+                    apiRequest('/users/')
+                ]);
+
+                // Populate summary
+                const summaryContainer = document.getElementById('summary');
+                summaryContainer.innerHTML = `
+                    <div class="summary-card">
+                        <h4>Total Employees</h4>
+                        <p>${dashboard.total_employees}</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Avg. Performance</h4>
+                        <p>${dashboard.average_performance.toFixed(2)}</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Feedback Count</h4>
+                        <p>${dashboard.feedback_count}</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>KPI Achievement</h4>
+                        <p>${dashboard.kpi_achievement_percent.toFixed(2)}%</p>
+                    </div>
+                `;
+
+                // Populate users table
+                const usersTableBody = document.querySelector("#users-table tbody");
+                if (users.length === 0) {
+                    usersTableBody.innerHTML = '<tr><td colspan="5" class="empty-state"><p>No users in the system yet.</p></td></tr>';
+                } else {
+                    usersTableBody.innerHTML = users.map(user => {
+                        const roleClass = `role-${user.role.toLowerCase()}`;
+                        const statusClass = user.is_active ? 'status-active' : 'status-inactive';
+                        const statusText = user.is_active ? 'Active' : 'Inactive';
+                        return `
+                            <tr>
+                                <td><strong>${user.name}</strong></td>
+                                <td>${user.email}</td>
+                                <td><span class="role-badge ${roleClass}">${user.role}</span></td>
+                                <td>${user.department || '—'}</td>
+                                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error loading admin data: ' + error.message, 'danger');
+            }
+        }
+
+        document.getElementById('add-user-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const userData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                role: document.getElementById('role').value,
+                department: document.getElementById('department').value
+            };
+            try {
+                await apiRequest('/users/', 'POST', userData);
+                showAlert('User created successfully!', 'success');
+                loadAdminData();
+                e.target.reset();
+            } catch (error) {
+                showAlert('Error creating user: ' + error.message, 'danger');
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', logout);
+
+        loadAdminData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EPM - Employee Performance Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Landing Page Specific Styles */
+        .hero-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #dc2626 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(220, 38, 38, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-subtitle {
+            color: #dc2626;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: #f3f4f6;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideUp 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-cta {
+            padding: 16px 40px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .btn-login {
+            background: #dc2626;
+            color: white;
+            border: 2px solid #dc2626;
+        }
+
+        .btn-login:hover {
+            background: #b91c1c;
+            border-color: #b91c1c;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-signup {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-signup:hover {
+            background: white;
+            color: #1a1a1a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .features-section {
+            background: #f8fafc;
+            padding: 80px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            border-top: 4px solid #dc2626;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            color: #1a1a1a;
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: #475569;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 60px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 800;
+            color: #dc2626;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: #d1d5db;
+        }
+
+        .footer-section {
+            background: #1a1a1a;
+            color: #9ca3af;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 3px solid #dc2626;
+        }
+
+        .footer-section p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .project-subtitle {
+                font-size: 16px;
+            }
+
+            .hero-description {
+                font-size: 16px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn-cta {
+                width: 100%;
+            }
+
+            .features-section {
+                padding: 60px 20px;
+                gap: 30px;
+            }
+
+            .stats-section {
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 30px 15px;
+            }
+
+            .hero-content h1 {
+                font-size: 28px;
+            }
+
+            .project-subtitle {
+                font-size: 14px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+            }
+
+            .btn-cta {
+                padding: 14px 28px;
+                font-size: 14px;
+            }
+
+            .stat-number {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="hero-section">
+        <div class="hero-content">
+            <div class="project-subtitle">Welcome to</div>
+            <h1>EPM</h1>
+            <p class="project-subtitle" style="margin-bottom: 30px;">Employee Performance Management</p>
+            
+            <p class="hero-description">
+                Streamline your organization's performance management with our powerful, intuitive platform. 
+                Track employee progress, manage feedback, and drive continuous improvement across your team.
+            </p>
+            
+            <div class="cta-buttons">
+                <a href="/login.html?role=Employee" class="btn-cta btn-login">Login as Employee</a>
+                <a href="/login.html?role=Manager" class="btn-cta btn-login">Login as Manager</a>
+                <a href="/login.html?role=Admin" class="btn-cta btn-login">Login as Admin</a>
+                <a href="/signup.html" class="btn-cta btn-signup">Create Account</a>
+            </div>
+        </div>
+    </main>
+
+    <section class="features-section">
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Performance Tracking</h3>
+            <p>Monitor employee performance metrics in real-time with detailed dashboards and analytics.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">💬</div>
+            <h3>Feedback Management</h3>
+            <p>Collect and manage constructive feedback to foster continuous improvement and growth.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>KPI Monitoring</h3>
+            <p>Set and track Key Performance Indicators aligned with organizational goals.</p>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">👥</div>
+            <h3>Team Management</h3>
+            <p>Manage employees, departments, and reporting hierarchies with ease.</p>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stat-item">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">Organizations</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-number">5000+</div>
+            <div class="stat-label">Active Users</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-number">99.9%</div>
+            <div class="stat-label">Uptime</div>
+        </div>
+
+        <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Support</div>
+        </div>
+    </section>
+
+    <section class="footer-section">
+        <p>&copy; 2025 EPM - Employee Performance Management System. All rights reserved. | Professional HR Solutions</p>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('token')) {
+                redirectToDashboard();
+            }
+        });
+    </script>
+</body>
+</html>
