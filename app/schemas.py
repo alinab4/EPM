@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List
 from datetime import datetime
 
@@ -15,7 +15,7 @@ class TokenData(BaseModel):
 
 class UserBase(BaseModel):
     name: str
-    email: EmailStr
+    email: str  # Changed from EmailStr to str for more flexibility
     department: Optional[str] = None
 
 
@@ -27,7 +27,7 @@ class UserCreate(UserBase):
 
 class UserUpdate(BaseModel):
     name: Optional[str] = None
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
     department: Optional[str] = None
     role: Optional[str] = None
     manager_id: Optional[int] = None

@@ -110,6 +110,8 @@
             body.append('username', email);
             body.append('password', password);
 
+            console.log('🔐 Attempting login with email:', email);
+            
             try {
                 const response = await fetch('/api/auth/login', {
                     method: 'POST',
@@ -117,17 +119,22 @@
                     headers: { 'Accept': 'application/json' }
                 });
                 
+                console.log('📡 Response status:', response.status);
+                
                 if (!response.ok) {
                     try {
                         const error = await response.json();
+                        console.error('❌ Login error details:', error);
                         showAlert('Login failed: ' + (error.detail || 'Invalid credentials'), 'danger');
                     } catch (parseError) {
+                        console.error('❌ Could not parse error response:', response.statusText);
                         showAlert('Login failed: ' + response.statusText, 'danger');
                     }
                     return;
                 }
 
                 const data = await response.json();
+                console.log('✅ Login successful, token received');
                 localStorage.setItem('token', data.access_token);
                 showAlert('Login successful!', 'success');
                 
@@ -135,7 +142,7 @@
                     redirectToDashboard();
                 }, 500);
             } catch (error) {
-                console.error('Error:', error);
+                console.error('❌ Network error:', error);
                 showAlert('Login error: ' + error.message, 'danger');
             }
         });

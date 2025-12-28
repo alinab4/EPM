@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EPM System Diagnostics</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .diagnostic {
+            background: #2d2d2d;
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .status-ok { color: #00ff00; }
+        .status-error { color: #ff0000; }
+        .status-warning { color: #ffff00; }
+        h1 { color: #00ff00; }
+        h2 { color: #00ffff; }
+        button {
+            background: #00ff00;
+            color: #1a1a1a;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 3px;
+        }
+        button:hover {
+            background: #00dd00;
+        }
+        pre {
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            padding: 10px;
+            overflow-x: auto;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 EPM System Diagnostics</h1>
+    
+    <div class="diagnostic">
+        <h2>API Health Check</h2>
+        <button onclick="checkHealth()">Check API Health</button>
+        <pre id="health-result">Waiting for check...</pre>
+    </div>
+
+    <div class="diagnostic">
+        <h2>Database Connection</h2>
+        <button onclick="checkDatabase()">Test Database</button>
+        <pre id="database-result">Waiting for check...</pre>
+    </div>
+
+    <div class="diagnostic">
+        <h2>Sample Login Test</h2>
+        <button onclick="testLogin()">Test Login (admin@example.com)</button>
+        <pre id="login-result">Waiting for check...</pre>
+    </div>
+
+    <div class="diagnostic">
+        <h2>Browser Storage</h2>
+        <button onclick="checkStorage()">Check Local Storage</button>
+        <pre id="storage-result">Waiting for check...</pre>
+    </div>
+
+    <div class="diagnostic">
+        <h2>Environment Check</h2>
+        <button onclick="checkEnvironment()">Check Environment</button>
+        <pre id="environment-result">Waiting for check...</pre>
+    </div>
+
+    <div class="diagnostic">
+        <h2>Actions</h2>
+        <button onclick="clearStorage()">Clear Local Storage</button>
+        <button onclick="viewLogs()">View Console Logs</button>
+    </div>
+
+    <script>
+        function log(msg) {
+            console.log('[DIAGNOSTIC]', msg);
+        }
+
+        async function checkHealth() {
+            const result = document.getElementById('health-result');
+            result.textContent = 'Checking...';
+            try {
+                const response = await fetch('/api/auth/health');
+                const data = await response.json();
+                result.textContent = '✅ API Response:\n' + JSON.stringify(data, null, 2);
+                if (response.ok) {
+                    result.className = 'status-ok';
+                } else {
+                    result.className = 'status-error';
+                }
+            } catch (error) {
+                result.textContent = '❌ Error:\n' + error.message;
+                result.className = 'status-error';
+            }
+        }
+
+        async function checkDatabase() {
+            const result = document.getElementById('database-result');
+            result.textContent = 'Checking...';
+            try {
+                const response = await fetch('/api/users/');
+                if (response.status === 401) {
+                    result.textContent = '⚠️ Authorization required (expected)\nDatabase appears to be connected';
+                    result.className = 'status-warning';
+                } else if (response.ok) {
+                    result.textContent = '✅ Database is accessible';
+                    result.className = 'status-ok';
+                } else {
+                    result.textContent = '❌ Database error: ' + response.statusText;
+                    result.className = 'status-error';
+                }
+            } catch (error) {
+                result.textContent = '❌ Connection error:\n' + error.message;
+                result.className = 'status-error';
+            }
+        }
+
+        async function testLogin() {
+            const result = document.getElementById('login-result');
+            result.textContent = 'Testing login...';
+            try {
+                const body = new URLSearchParams();
+                body.append('username', 'admin@example.com');
+                body.append('password', 'adminpass');
+
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    body: body,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    result.textContent = '✅ Login successful!\n' + JSON.stringify(data, null, 2);
+                    result.className = 'status-ok';
+                } else {
+                    result.textContent = '❌ Login failed:\n' + JSON.stringify(data, null, 2);
+                    result.className = 'status-error';
+                }
+            } catch (error) {
+                result.textContent = '❌ Error:\n' + error.message;
+                result.className = 'status-error';
+            }
+        }
+
+        function checkStorage() {
+            const result = document.getElementById('storage-result');
+            const storage = {
+                token: localStorage.getItem('token') ? '(token stored)' : '(no token)',
+                keys: Object.keys(localStorage),
+                size: new Blob(Object.values(localStorage)).size + ' bytes'
+            };
+            result.textContent = JSON.stringify(storage, null, 2);
+        }
+
+        function checkEnvironment() {
+            const result = document.getElementById('environment-result');
+            const env = {
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                onLine: navigator.onLine,
+                currentURL: window.location.href,
+                API_BASE: '/api'
+            };
+            result.textContent = JSON.stringify(env, null, 2);
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            alert('✅ Local storage cleared. Please refresh the page.');
+        }
+
+        function viewLogs() {
+            alert('Open your browser console (F12 or Ctrl+Shift+J) to see detailed logs');
+        }
+
+        // Run initial health check on load
+        window.addEventListener('load', () => {
+            log('Diagnostics page loaded');
+            checkHealth();
+        });
+    </script>
+</body>
+</html>
