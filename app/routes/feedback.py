@@ -105,7 +105,7 @@ def get_my_feedback(db: Session = Depends(get_db), current_user: models.User = D
 @router.delete("/{feedback_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_feedback(
     feedback_id: int,
-    db: Session = Depends(get_d),
+    db: Session = Depends(get_db),
     current_user: models.User = Depends(require_admin)
 ):
     """
