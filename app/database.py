@@ -16,6 +16,9 @@ if USE_SQLITE:
 else:
     # PostgreSQL Configuration
     DB_URL = os.getenv("DATABASE_URL")
+    if DB_URL and DB_URL.startswith("postgres://"):
+        DB_URL = DB_URL.replace("postgres://", "postgresql://", 1)
+        
     if not DB_URL:
         DB_USER = os.getenv("DB_USER", "postgres")
         DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
