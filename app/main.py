@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from .database import init_db, SessionLocal
 from . import models
 from .routes import auth, users, performance, feedback, kpi
-from .ngrok import init_ngrok, shutdown_ngrok
 import os
 
 app = FastAPI(title="Employee Performance Management API")
@@ -243,6 +242,7 @@ def on_startup():
 
 @app.on_event("shutdown")
 def on_shutdown():
-    """Close ngrok tunnels on shutdown"""
-    shutdown_ngrok()
+    """App shutdown event"""
+    pass
+
 
