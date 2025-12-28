@@ -24,8 +24,20 @@ app.include_router(performance.router)
 app.include_router(feedback.router)
 app.include_router(kpi.router)
 
-# Mount frontend static directory AFTER API routes so /api/* paths match first
+# --- Serve Frontend Files ---
+# This section must be placed AFTER all API routes.
+# It configures the app to serve the static frontend files (HTML, CSS, JS).
+
+# Define the absolute path to the 'frontend' directory.
 frontend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'frontend')
+
+# The `StaticFiles` mount handles serving all files from the `frontend_dir`.
+# - `directory=frontend_dir`: Specifies the folder to serve.
+# - `html=True`: This is the key part. It tells FastAPI to automatically
+#                serve 'index.html' for any path that is a directory,
+#                including the root path '/'. This is how we ensure
+#                index.html is the first page loaded.
+# - `name="frontend"`: An internal name for this static mount.
 if os.path.isdir(frontend_dir):
     app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
 
