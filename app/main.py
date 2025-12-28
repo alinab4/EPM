@@ -49,7 +49,13 @@ def on_startup():
     from datetime import datetime, timedelta
     import random
     
-    init_db()
+    try:
+        init_db()
+    except Exception as e:
+        print(f"✗ Warning: Could not initialize database on startup: {str(e)}")
+        print("  The application will start, but database operations may fail.")
+        print("  Please ensure your DATABASE_URL environment variable is set correctly.")
+        return
     
     db = SessionLocal()
     try:
