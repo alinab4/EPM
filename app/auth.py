@@ -42,5 +42,5 @@ def decode_access_token(token: str) -> dict:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except JWTError:
-        raise
+    except JWTError as e:
+        raise ValueError(f"Invalid token: {str(e)}")

@@ -19,6 +19,8 @@ class User(Base):
     manager = relationship("User", remote_side=[id])
     performance_reviews = relationship("PerformanceReview", foreign_keys="[PerformanceReview.employee_id]", back_populates="employee")
     manager_reviews = relationship("PerformanceReview", foreign_keys="[PerformanceReview.manager_id]", back_populates="manager")
+    feedback_received = relationship("Feedback", foreign_keys="[Feedback.to_user_id]")
+    feedback_given = relationship("Feedback", foreign_keys="[Feedback.from_user_id]")
     kpi_results = relationship("KPIResult", back_populates="employee")
 
     def __repr__(self):

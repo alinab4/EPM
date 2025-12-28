@@ -21,7 +21,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str
-    role: str = Field("Employee", pattern="^(Admin|Manager|Employee)$")
+    role: str = "Employee"
     manager_id: Optional[int] = None
 
 
@@ -29,7 +29,7 @@ class UserUpdate(BaseModel):
     name: Optional[str] = None
     email: Optional[EmailStr] = None
     department: Optional[str] = None
-    role: Optional[str] = Field(None, pattern="^(Admin|Manager|Employee)$")
+    role: Optional[str] = None
     manager_id: Optional[int] = None
     password: Optional[str] = None
     is_active: Optional[bool] = None
@@ -133,6 +133,13 @@ class ApprovalOut(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ManagerDashboard(BaseModel):
+    team_size: int
+    average_performance: float
+    feedback_count: int
+    latest_rating: Optional[float] = None
 
 
 class EmployeeDashboard(BaseModel):

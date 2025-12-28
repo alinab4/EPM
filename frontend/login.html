@@ -118,8 +118,12 @@
                 });
                 
                 if (!response.ok) {
-                    const error = await response.json();
-                    showAlert('Login failed: ' + (error.detail || 'Invalid credentials'), 'danger');
+                    try {
+                        const error = await response.json();
+                        showAlert('Login failed: ' + (error.detail || 'Invalid credentials'), 'danger');
+                    } catch (parseError) {
+                        showAlert('Login failed: ' + response.statusText, 'danger');
+                    }
                     return;
                 }
 
@@ -132,7 +136,7 @@
                 }, 500);
             } catch (error) {
                 console.error('Error:', error);
-                showAlert('An error occurred: ' + error.message, 'danger');
+                showAlert('Login error: ' + error.message, 'danger');
             }
         });
     </script>

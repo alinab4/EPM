@@ -132,8 +132,12 @@
                 });
                 
                 if (!response.ok) {
-                    const error = await response.json();
-                    showAlert('Registration failed: ' + (error.detail || 'An error occurred'), 'danger');
+                    try {
+                        const error = await response.json();
+                        showAlert('Registration failed: ' + (error.detail || 'An error occurred'), 'danger');
+                    } catch (parseError) {
+                        showAlert('Registration failed: ' + response.statusText, 'danger');
+                    }
                     return;
                 }
                 
@@ -143,7 +147,7 @@
                 }, 2000);
             } catch (error) {
                 console.error('Error:', error);
-                showAlert('Registration failed: ' + error.message, 'danger');
+                showAlert('Registration error: ' + error.message, 'danger');
             }
         });
     </script>

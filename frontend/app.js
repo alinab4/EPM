@@ -59,9 +59,15 @@ function getCurrentUser() {
     if (!token) return null;
     try {
         const decoded = JSON.parse(atob(token.split('.')[1]));
+        // Check if token is expired
+        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+            localStorage.removeItem(TOKEN_KEY);
+            return null;
+        }
         return decoded;
     } catch (e) {
         console.error('Failed to decode token:', e);
+        localStorage.removeItem(TOKEN_KEY);
         return null;
     }
 }
