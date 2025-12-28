@@ -37,9 +37,6 @@ def on_startup():
     from datetime import datetime, timedelta
     import random
     
-    # Initialize ngrok
-    init_ngrok()
-    
     init_db()
     
     db = SessionLocal()
